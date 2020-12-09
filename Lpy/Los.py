@@ -12,8 +12,8 @@ import pandas as pd
 def filename_replace(path, filename, old_str, new_str):
     '''
     :param path: where files exist
-    :param filename: filename, re
-    :param old_str: old string
+    :param filename: string contained in the filename, NO re
+    :param old_str: old string that you want to replace
     :param new_str: new string that you want to use
     :return: none
     '''
@@ -22,10 +22,10 @@ def filename_replace(path, filename, old_str, new_str):
     for old_name in old_names:
         if old_name != sys.argv[0]:
             if old_name.__contains__(filename):
-                new_name= old_name.replace(old_str,new_str)
+                new_name = old_name.replace(old_str, new_str)
                 os.rename(os.path.join(path, old_name), os.path.join(path, new_name))
                 print(old_name, "has been renamed successfully! New name is: ", new_name)
-    return print('Finished')
+    return print('Renaming Finished')
 
 
 def formatSize(bytes):
@@ -88,24 +88,36 @@ def file_move(search, path, target_path):
 
 if __name__ == '__main__':
     path = input('please input path:')
-    mode = int(input('>>choose mode:\n1:find files\n2:rename files\n3:move files\n>>Your choose:'))
-    if mode == 1:
-        w_str = input('search list that you want:\n')
-        w = w_str.split(",")
-        s_str = input('search list that you don;t want:\n')
-        s = s_str.split(",")
-        df = search_file(path, w, s)
-        print(df)
-        df.to_csv('Found_files.csv', index=0)
-    elif mode == 2:
-        filename = input('filename that you want to rename:\n')
-        old_str = input('Old string:\n')
-        new_str = input('New string:\n')
-        filename_replace(path, filename, old_str, new_str)
-    elif mode == 3:
-        search = input('filename that you want to move:\n')
-        search = search.split(",")
-        target_path = input('Target path:\n')
-        file_move(search, path, target_path)
-    else:
-        print('wrong')
+    flag = '1'
+    while flag == '1':
+        mode = int(input('>>choose mode:\n1:find files\n2:rename files\n3:move files\n>>Your choose:'))
+        if mode == 1:
+            w_str = input('search list that you want:\n')
+            w = w_str.split(",")
+            s_str = input('search list that you don;t want:\n')
+            s = s_str.split(",")
+            df = search_file(path, w, s)
+            print(df)
+            df.to_csv('Found_files.csv', index=0)
+        elif mode == 2:
+            filename = input('[No Re]filename that you want to rename:\n')
+            w_str='*'+filename+'*'
+            w = w_str.split(",")
+            s=[]
+            df=search_file(path,w,s)
+            print('The files list:\n', df)
+            old_str = input('Old string:\n')
+            new_str = input('New string:\n')
+            filename_replace(path, filename, old_str, new_str)
+        elif mode == 3:
+            search = input('filename that you want to move:\n')
+            search = search.split(",")
+            target_path = input('Target path:\n')
+            file_move(search, path, target_path)
+        else:
+            print('wrong')
+        flag=input('Input 1 to continue,or finished:\n')
+        if flag=='1':
+            print('=====continue=====')
+        else:
+            print('Finished')
