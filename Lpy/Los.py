@@ -92,9 +92,9 @@ if __name__ == '__main__':
     while flag == '1':
         mode = int(input('>>choose mode:\n1:find files\n2:rename files\n3:move files\n>>Your choose:'))
         if mode == 1:
-            w_str = input('search list that you want:\n')
+            w_str = input('[Re]search list that you want:\n')
             w = w_str.split(",")
-            s_str = input('search list that you don;t want:\n')
+            s_str = input('[Re]search list that you don;t want:\n')
             s = s_str.split(",")
             df = search_file(path, w, s)
             print(df)
@@ -110,10 +110,11 @@ if __name__ == '__main__':
             new_str = input('New string:\n')
             filename_replace(path, filename, old_str, new_str)
         elif mode == 3:
-            search = input('filename that you want to move:\n')
+            search = input('[Re]filename that you want to move:\n')
             search = search.split(",")
             target_path = input('Target path:\n')
             file_move(search, path, target_path)
+            # TODO:if target_path doesn't exist,filename would be the target_path,to fixed it.
         else:
             print('wrong')
         flag=input('Input 1 to continue,or finished:\n')
