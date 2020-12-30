@@ -86,6 +86,25 @@ def file_move(search, path, target_path):
                     print('number of files moved: ',count)
 
 
+def file_copy(df,target_path):
+    """
+    :param df:data with 'path' and 'filename'
+    :param target_path:
+    :return:
+    """
+    print('Total File numbers:',len(df))
+    count=0
+    try:
+        for i in range(0, len(df)):
+            shutil.copy(df.iloc[i]['path'] + '\\' + df.iloc[i]['filename'], target_path)
+            count += 1
+            print(df.iloc[i]['filename'] + ' has been copied\n', count)
+    except shutil.Error as e:
+        print('file already exists')
+    finally:
+        print('number of files: ', count)
+
+
 if __name__ == '__main__':
     path = input('please input path:')
     flag = '1'
@@ -114,7 +133,12 @@ if __name__ == '__main__':
             search = search.split(",")
             target_path = input('Target path:\n')
             file_move(search, path, target_path)
-            # TODO:if target_path doesn't exist,filename would be the target_path,to fixed it.
+            # TODO:if target_path doesn't exist,filename would be the target_path,to fix it.
+        elif mode == 4:
+            data = pd.read_csv(input('list_file'), header=0)
+            data = data.dropna(axis=0, how='any')
+            target_path=(input('target_path'))
+            file_copy(data,target_path)
         else:
             print('wrong')
         flag=input('Input 1 to continue,or finished:\n')

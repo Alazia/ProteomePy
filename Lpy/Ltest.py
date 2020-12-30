@@ -1,11 +1,17 @@
 import pandas as pd
-p_value=0.05
-df=pd.read_csv('../test/down.csv',nrows=5)
-print(df)
-m=len(df['p_value'])
-df['p_rank']=df['p_value'].rank(ascending=True)
-df['p_adjust_value']=df['p_value']*(m/df['p_rank'])
-df['p_k']=p_value*df['p_rank']/m
-min_rank=min(df[df['p_adjust_value']>df['p_k']]['p_rank'])
-df[df['p_rank']>=min_rank]['p_adjust_value']=df['p_value']
-print(df)
+import numpy as np
+data=pd.read_csv('../test/xx_4758prot_21sample.csv',header=0,index_col=0)
+print(data)
+rep=[[1,2,3], [4,5,8]]
+columns=sum(rep, [])
+print(columns)
+df=data.T
+pd.set_option('mode.chained_assignment', None)
+df['rep']=df.index
+for i in range(len(rep)):
+    df['rep'][rep[i]]='rep_'+str(i)
+dff=df.iloc[columns,:]
+dff.index=dff['rep'].values
+dff=dff.drop('rep',axis=1)
+
+print(dff)
